@@ -18,14 +18,12 @@ Spree::Order.class_eval do
     end
   end
 
-  private
-
-    def enable_subscriptions
+  def enable_subscriptions
       subscriptions.each do |subscription|
         subscription.update(
           source: payments.from_credit_card.first.source,
           enabled: true,
-          ship_address: ship_address.clone,
+          ship_address: bill_address.clone,
           bill_address: bill_address.clone
         )
       end
@@ -34,6 +32,10 @@ Spree::Order.class_eval do
     def any_disabled_subscription?
       subscriptions.disabled.any?
     end
+
+  private
+
+    
 
     def update_subscriptions
       line_items.each do |line_item|
